@@ -33,7 +33,7 @@ export async function GET(request: Request) {
         where: filter,
         skip: (pageNumber - 1) * pageSizeNumber,
         take: pageSizeNumber,
-        orderBy: { checkedAt: sortOrder === 'asc' ? 'asc' : 'desc' },
+        orderBy: { checkedAt: sortOrder === 'Asc' ? 'asc' : 'desc' },
     });
 
     return NextResponse.json({
