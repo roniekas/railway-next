@@ -11,6 +11,9 @@ RUN npm install
 # Copy application files
 COPY . .
 
+# Run Prisma generate to create the Prisma client
+RUN npx prisma generate
+
 # Build the Next.js app
 RUN npm run build
 
@@ -30,14 +33,11 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules/.prisma ./.prisma
 
-# Install Prisma CLI for migrations
-RUN npm install prisma --production
-
 # Set environment variable to production
 ENV NODE_ENV=production
 
 # Run Prisma migrations before starting the app
-CMD npx prisma migrate deploy && npm start
+CMD ["npx", "prisma", "migrate", "deploy"] && npm start
 
 # Expose port
 EXPOSE 3000
