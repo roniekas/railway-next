@@ -36,7 +36,7 @@ async function fetchDomainsFromCSV() {
 }
 
 if (process.env.NODE_ENV === 'production') {
-	cron.schedule(`${process.env.CRON_JOB_SCHEDULE}`, async () => {
+	cron.schedule("* * * * *", async () => {
 		console.log('Running scheduled DNS validation');
 		
 		try {
