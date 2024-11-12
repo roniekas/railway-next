@@ -42,11 +42,12 @@ async function fetchDomainsFromCSV() {
 		try {
 			const domains = await fetchDomainsFromCSV();
 			
-			if (domains.length !== 0) {
+			if (domains.length === 0) {
 				console.log("No domains found in CSV file.");
 				return;
 			}
 			
+			console.log(`DOMAIN => ${process.env.API_HOST}`);
 			const response = await fetch(`${process.env.API_HOST}/api/validate-records`, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
