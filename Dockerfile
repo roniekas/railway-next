@@ -37,7 +37,8 @@ COPY --from=builder /app/node_modules/.prisma ./.prisma
 ENV NODE_ENV=production
 
 # Run Prisma migrations before starting the app
-CMD ["npx", "prisma", "migrate", "deploy"] && npm start
+CMD ["npx", "prisma", "migrate", "deploy"]
+RUN npm start
 
 # Expose port
 EXPOSE 3000
