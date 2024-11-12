@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
-import './cronJobs';
+if (process.env.NODE_ENV === 'production') {
+  require('./cronJobs.js');
+}
 
 const nextConfig: NextConfig = {
   /* config options here */

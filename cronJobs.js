@@ -19,7 +19,6 @@ async function fetchDomainsFromCSV() {
 				.pipe(csv({ headers: ['domain'] }))
 				.on('data', (row) => {
 					if (row.domain) {
-						console.log(row.domain);
 						domains.push(row.domain.trim());
 					}
 				})
@@ -36,29 +35,31 @@ async function fetchDomainsFromCSV() {
 	}
 }
 
-cron.schedule(process.env.CRON_JOB_SCHEDULE, async () => {
-	console.log('Running scheduled DNS validation');
-	
-	try {
-		const domains = await fetchDomainsFromCSV();
+if (process.env.NODE_ENV === 'production') {
+	cron.schedule(`${process.env.CRON_JOB_SCHEDULE}`, async () => {
+		console.log('Running scheduled DNS validation');
 		
-		if (domains.length !== 0) {
-			console.log("No domains found in CSV file.");
-			return;
+		try {
+			const domains = await fetchDomainsFromCSV();
+			
+			if (domains.length !== 0) {
+				console.log("No domains found in CSV file.");
+				return;
+			}
+			
+			const response = await fetch(`${process.env.API_HOST}/api/validate-records`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ domains }),
+			});
+			
+			if (!response.ok) {
+				console.error('Error validating DNS records');
+			} else {
+				console.log('DNS validation completed successfully');
+			}
+		} catch (error) {
+			console.error('Error during DNS validation:', error);
 		}
-		
-		const response = await fetch(`${process.env.API_HOST}/api/validate-records`, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ domains }),
-		});
-		
-		if (!response.ok) {
-			console.error('Error validating DNS records');
-		} else {
-			console.log('DNS validation completed successfully');
-		}
-	} catch (error) {
-		console.error('Error during DNS validation:', error);
-	}
-});
+	});
+}
