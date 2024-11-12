@@ -35,7 +35,7 @@ async function fetchDomainsFromCSV() {
 	}
 }
 
-if (process.env.NODE_ENV === 'production') {
+// if (process.env.NODE_ENV === 'production') {
 	cron.schedule("* * * * *", async () => {
 		console.log('Running scheduled DNS validation');
 		
@@ -62,4 +62,4 @@ if (process.env.NODE_ENV === 'production') {
 			console.error('Error during DNS validation:', error);
 		}
 	});
-}
+// }
