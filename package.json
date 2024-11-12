@@ -4,12 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm run migrate:init && npm run migrate:deploy && next build",
+    "build": "npm run migrate:deploy && next build",
     "start": "next start --port ${PORT-3000}",
     "migrate:dev": "prisma migrate dev",
     "migrate:deploy": "npx prisma migrate deploy",
     "migrate:status": "prisma migrate status",
-    "migrate:init": "npx prisma migrate dev --name init",
     "generate": "prisma generate"
   },
   "dependencies": {
